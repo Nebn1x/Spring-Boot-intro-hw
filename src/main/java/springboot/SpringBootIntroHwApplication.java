@@ -26,6 +26,7 @@ public class SpringBootIntroHwApplication {
             book.setTitle("Java Spring Boot");
             book.setAuthor("James Bond");
             bookService.save(book);
+            System.out.println(bookService.findAll());
         };
     }
 }
