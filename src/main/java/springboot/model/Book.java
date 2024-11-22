@@ -87,10 +87,17 @@ public class Book {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Book book = (Book) o;
-        return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(isbn, book.isbn) && Objects.equals(price, book.price) && Objects.equals(description, book.description) && Objects.equals(coverImage, book.coverImage);
+        return Objects.equals(id, book.id) && Objects.equals(title, book.title)
+                && Objects.equals(author, book.author) && Objects.equals(isbn, book.isbn)
+                && Objects.equals(price, book.price) && Objects.equals(description, book.description)
+                && Objects.equals(coverImage, book.coverImage);
     }
 
     @Override
