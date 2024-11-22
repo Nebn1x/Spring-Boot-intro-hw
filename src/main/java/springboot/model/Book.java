@@ -96,7 +96,8 @@ public class Book {
         Book book = (Book) o;
         return Objects.equals(id, book.id) && Objects.equals(title, book.title)
                 && Objects.equals(author, book.author) && Objects.equals(isbn, book.isbn)
-                && Objects.equals(price, book.price) && Objects.equals(description, book.description)
+                && Objects.equals(price, book.price)
+                && Objects.equals(description, book.description)
                 && Objects.equals(coverImage, book.coverImage);
     }
 
@@ -107,14 +108,14 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", price=" + price +
-                ", description='" + description + '\'' +
-                ", coverImage='" + coverImage + '\'' +
-                '}';
+        return "Book{"
+                + "id=" + id
+                + ", title='" + title + '\''
+                + ", author='" + author + '\''
+                + ", isbn='" + isbn + '\''
+                + ", price=" + price
+                + ", description='" + description + '\''
+                + ", coverImage='" + coverImage + '\''
+                + '}';
     }
 }
