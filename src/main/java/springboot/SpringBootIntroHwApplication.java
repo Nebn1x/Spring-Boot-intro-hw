@@ -1,5 +1,6 @@
 package springboot;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +10,11 @@ import springboot.model.Book;
 import springboot.service.BookService;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class SpringBootIntroHwApplication {
 
     @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootIntroHwApplication.class, args);

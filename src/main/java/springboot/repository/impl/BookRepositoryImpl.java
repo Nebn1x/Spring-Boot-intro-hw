@@ -1,25 +1,21 @@
 package springboot.repository.impl;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import springboot.exeptions.DataProcessingException;
 import springboot.model.Book;
 import springboot.repository.BookRepository;
 
 @Repository
+@RequiredArgsConstructor
 public class BookRepositoryImpl implements BookRepository {
 
     private final SessionFactory sessionFactory;
-
-    @Autowired
-    public BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public Book save(Book book) {
@@ -49,6 +45,8 @@ public class BookRepositoryImpl implements BookRepository {
             Query<Book> getAllBookQuery = session.createQuery(
                     "from Book", Book.class);
             return getAllBookQuery.getResultList();
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't find books");
         }
     }
 }
