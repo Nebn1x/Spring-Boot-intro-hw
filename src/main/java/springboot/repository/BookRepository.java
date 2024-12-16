@@ -1,10 +1,13 @@
 package springboot.repository;
 
-import springboot.model.Book;
 import java.util.List;
+import java.util.Optional;
+import springboot.model.Book;
 
 public interface BookRepository {
     Book save(Book book);
 
-    List findAll();
+    List<Book> getAll();
+
+    Optional<Book> getBookById(Long id);
 }
