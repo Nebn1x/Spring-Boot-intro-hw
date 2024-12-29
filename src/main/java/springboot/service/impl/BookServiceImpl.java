@@ -14,7 +14,6 @@ import springboot.service.BookService;
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
@@ -26,37 +25,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAll() {
-        return bookRepository.findAll().stream()
+        return bookRepository.getAll().stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        return bookRepository.findById(id)
-               .map(bookMapper::toDto)
-               .orElseThrow(() -> new EntityNotFoundException("Cannot find Book with id: " + id));
-    }
-
-    @Override
-    public BookDto updateBookById(CreateBookRequestDto requestDto, Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Cannot find Book with id: " + id));
-        book.setTitle(requestDto.getTitle());
-        book.setAuthor(requestDto.getAuthor());
-        book.setIsbn(requestDto.getIsbn());
-        book.setPrice(requestDto.getPrice());
-        book.setDescription(requestDto.getDescription());
-        book.setCoverImage(requestDto.getCoverImage());
-
-        return bookMapper.toDto(bookRepository.save(book));
-    }
-
-    @Override
-    public void deleteBookById(Long id) {
-        bookRepository.findById(id).orElseThrow(
+        Book book = bookRepository.getBookById(id).orElseThrow(
                 () -> new EntityNotFoundException("Cannot find Book with id: " + id)
         );
-        bookRepository.deleteById(id);
+        return bookMapper.toDto(book);
     }
+
 }
