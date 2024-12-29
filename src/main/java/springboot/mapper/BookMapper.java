@@ -1,6 +1,7 @@
 package springboot.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import springboot.config.MapperConfig;
 import springboot.dto.BookDto;
 import springboot.dto.CreateBookRequestDto;
@@ -12,4 +13,6 @@ public interface BookMapper {
     BookDto toDto(Book book);
 
     Book toModel(CreateBookRequestDto requestDto);
+
+    void updateBookFromDto(CreateBookRequestDto requestDto, @MappingTarget Book book);
 }
