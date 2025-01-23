@@ -1,8 +1,9 @@
 package springboot.controller;
 
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import springboot.dto.BookDto;
-import springboot.dto.CreateBookRequestDto;
+import springboot.dto.book.BookDto;
+import springboot.dto.book.CreateBookRequestDto;
 import springboot.service.BookService;
 
 @RequiredArgsConstructor
@@ -23,8 +24,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookDto> getAll() {
-        return bookService.getAll();
+    public Page<BookDto> getAll(Pageable pageable) {
+        return bookService.getAll(pageable);
     }
 
     @PostMapping
