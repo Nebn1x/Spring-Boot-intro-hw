@@ -1,15 +1,14 @@
 package springboot.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import springboot.dto.book.BookDto;
-import springboot.dto.book.CreateBookRequestDto;
+import java.util.List;
+import springboot.dto.BookDto;
+import springboot.dto.CreateBookRequestDto;
 
 public interface BookService {
 
     BookDto createBook(CreateBookRequestDto requestDto);
 
-    Page<BookDto> getAll(Pageable pageable);
+    List<BookDto> getAll();
 
     BookDto getBookById(Long id);
 

@@ -3,8 +3,8 @@ package springboot.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import springboot.config.MapperConfig;
-import springboot.dto.book.BookDto;
-import springboot.dto.book.CreateBookRequestDto;
+import springboot.dto.BookDto;
+import springboot.dto.CreateBookRequestDto;
 import springboot.model.Book;
 
 @Mapper(config = MapperConfig.class)
