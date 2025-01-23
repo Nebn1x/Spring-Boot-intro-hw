@@ -9,8 +9,8 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Stri
     private String fieldMatch;
 
     public void initialize(FieldMatch constraintAnnotation) {
-        this.field = constraintAnnotation.password();
-        this.fieldMatch = constraintAnnotation.repeatedPassword();
+        this.field = constraintAnnotation.field();
+        this.fieldMatch = constraintAnnotation.fieldMatch();
     }
 
     @Override
