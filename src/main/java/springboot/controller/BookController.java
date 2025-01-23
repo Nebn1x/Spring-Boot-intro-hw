@@ -24,6 +24,7 @@ import springboot.service.BookService;
 public class BookController {
     private final BookService bookService;
 
+
     @GetMapping
     public Page<BookDto> getAll(Pageable pageable) {
         return bookService.getAll(pageable);
