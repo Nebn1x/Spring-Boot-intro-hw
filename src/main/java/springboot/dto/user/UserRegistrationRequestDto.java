@@ -6,15 +6,17 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import springboot.validation.FieldMatch;
 
-@FieldMatch(field = "password", fieldMatch = "confirmPassword")
+@FieldMatch(password = "password", repeatedPassword = "repeatPassword")
 @Data
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email
     private String email;
+
     @NotBlank
     @Length(min = 8, max = 20)
     private String password;
+
     @NotBlank
     @Length(min = 8, max = 20)
     private String repeatPassword;

@@ -13,11 +13,15 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldMatch {
-    String message() default "Fields is not match";
+    String message() default "Fields do not match";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
-    String field();
-    String fieldMatch();
+
+    String password();
+
+    String repeatedPassword();
 
     @Target({ ElementType.TYPE })
     @Retention(RetentionPolicy.RUNTIME)

@@ -4,23 +4,25 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;
 
-public class FieldMatchValidator implements ConstraintValidator<FieldMatch, String> {
-    private String field;
-    private String fieldMatch;
+public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
+    private String password;
+    private String repeatedPassword;
 
+    @Override
     public void initialize(FieldMatch constraintAnnotation) {
-        this.field = constraintAnnotation.field();
-        this.fieldMatch = constraintAnnotation.fieldMatch();
+        this.password = constraintAnnotation.password();
+        this.repeatedPassword = constraintAnnotation.repeatedPassword();
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        Object fieldValue = new BeanWrapperImpl(value)
-                .getPropertyValue(field);
-        Object fieldMatchValue = new BeanWrapperImpl(value)
-                .getPropertyValue(fieldMatch);
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        Object passwordValue = new BeanWrapperImpl(value).getPropertyValue(password);
+        Object repeatedPasswordValue = new BeanWrapperImpl(value).getPropertyValue(repeatedPassword);
 
-        return fieldValue != null && fieldValue.equals(fieldMatchValue);
+        if (passwordValue == null || repeatedPasswordValue == null) {
+            return false;
+        }
 
+        return passwordValue.equals(repeatedPasswordValue);
     }
 }
