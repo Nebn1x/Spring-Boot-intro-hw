@@ -1,12 +1,11 @@
 package springboot.service.impl;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import springboot.dto.BookDto;
-import springboot.dto.CreateBookRequestDto;
+import springboot.dto.book.BookDto;
+import springboot.dto.book.CreateBookRequestDto;
 import springboot.exeptions.EntityNotFoundException;
 import springboot.mapper.BookMapper;
 import springboot.model.Book;
