@@ -13,7 +13,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
-@Table(name = "user_changelog")
+@Table(name = "users")
 @Entity
 @SQLDelete(sql = "UPDATE employees SET is_deleted = true WHERE id=?")
 @SQLRestriction(value = "is_deleted=false")
