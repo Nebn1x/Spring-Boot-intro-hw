@@ -2,8 +2,8 @@ package springboot.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import springboot.dto.BookDto;
-import springboot.dto.CreateBookRequestDto;
+import springboot.dto.book.BookDto;
+import springboot.dto.book.CreateBookRequestDto;
 
 public interface BookService {
 
