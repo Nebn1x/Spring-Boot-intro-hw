@@ -8,6 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 @Documented
 @Constraint(validatedBy = {FieldMatchValidator.class})
 @Target({ElementType.TYPE, ElementType.PARAMETER})
@@ -17,6 +18,7 @@ public @interface FieldMatch {
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String password();
+
     String repeatedPassword();
 
     @Target({ ElementType.TYPE })
