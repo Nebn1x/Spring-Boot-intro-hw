@@ -17,7 +17,7 @@ import springboot.service.UserService;
 public class AuthenticationController {
     private final UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);

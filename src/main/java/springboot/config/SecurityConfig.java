@@ -1,6 +1,7 @@
 package springboot.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,9 +33,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/auth/register").permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers(
+                                        antMatcher("/auth/**"),
+                                        antMatcher("/swagger-ui/**"),
+                                        antMatcher("/v3/api-docs/**"))
+                                .permitAll()
                 )
                 .httpBasic(withDefaults())
                 .sessionManagement(session ->
