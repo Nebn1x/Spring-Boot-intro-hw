@@ -1,36 +1,25 @@
 package springboot.security;
 
-import java.security.SecureRandom;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import springboot.dto.user.UserLoginRequestDto;
-import springboot.model.User;
-import springboot.repository.UserRepository;
+import springboot.dto.user.UserLoginResponseDto;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final TokenUtil tokenUtil;
 
-    public String authenticate(UserLoginRequestDto requestDto) {
-        Optional<User> user = userRepository.findByEmail(requestDto.email());
-        if (user.isEmpty()) {
-            throw new RuntimeException("Can't login");
-        }
-        String userPasswordFromDb = user.get().getPassword();
-        String hashedPassword = HashUtil.hashPassword(requestDto.password(), generateSalt());
-        if (!hashedPassword.equals(userPasswordFromDb)) {
-            throw new RuntimeException("Can't login");
-        }
-        return tokenUtil.generateToken(requestDto.email());
-    }
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
-    private byte[] generateSalt() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] salt = new byte[16];
-        secureRandom.nextBytes(salt);
-        return salt;
+    public UserLoginResponseDto authenticate(UserLoginRequestDto requestDto) {
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(requestDto.email(), requestDto.password())
+        );
+        String token = jwtUtil.generateToken(authentication.getName());
+        return new UserLoginResponseDto(token);
     }
 }
