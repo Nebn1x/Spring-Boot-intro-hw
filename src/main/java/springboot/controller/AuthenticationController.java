@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springboot.dto.user.UserLoginRequestDto;
 import springboot.dto.user.UserRegistrationRequestDto;
 import springboot.dto.user.UserResponseDto;
 import springboot.exeptions.RegistrationException;
+import springboot.security.AuthenticationService;
 import springboot.service.UserService;
 
 @RestController
@@ -16,10 +18,16 @@ import springboot.service.UserService;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         return userService.register(requestDto);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody @Valid UserLoginRequestDto requestDto) {
+        return authenticationService.authenticate(requestDto);
     }
 }
