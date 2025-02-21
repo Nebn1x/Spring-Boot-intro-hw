@@ -14,12 +14,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import springboot.security.BearerAuthenticationFilter;
+import springboot.security.JwtAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
+    private final BearerAuthenticationFilter bearerAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -43,6 +47,8 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(userDetailsService)
+                .addFilterBefore(jwtAuthenticationFilter, BearerAuthenticationFilter.class)
+                .addFilterBefore(bearerAuthenticationFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 }
