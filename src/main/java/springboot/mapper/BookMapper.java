@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import springboot.config.MapperConfig;
 import springboot.dto.book.BookDto;
+import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.book.CreateBookRequestDto;
 import springboot.model.Book;
 
@@ -15,4 +16,7 @@ public interface BookMapper {
     Book toModel(CreateBookRequestDto requestDto);
 
     void updateBookFromDto(CreateBookRequestDto requestDto, @MappingTarget Book book);
+
+    BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
+
 }

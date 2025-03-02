@@ -1,5 +1,6 @@
 package springboot.service.impl;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,4 +55,10 @@ public class BookServiceImpl implements BookService {
         }
         throw new EntityNotFoundException("Cannot find Book with id: " + id);
     }
+
+    @Override
+    public List<Book> findAllByCategoryId(Long categoryId) {
+        return bookRepository.findAllByCategoryId(categoryId);
+    }
+
 }

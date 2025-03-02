@@ -1,9 +1,11 @@
 package springboot.service;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import springboot.dto.book.BookDto;
 import springboot.dto.book.CreateBookRequestDto;
+import springboot.model.Book;
 
 public interface BookService {
 
@@ -16,5 +18,7 @@ public interface BookService {
     BookDto updateBookById(CreateBookRequestDto requestDto, Long id);
 
     void deleteBookById(Long id);
+
+    List<Book> findAllByCategoryId(Long categoryId);
 
 }
