@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import springboot.dto.book.BookDto;
+import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.book.CreateBookRequestDto;
 import springboot.exeptions.EntityNotFoundException;
 import springboot.mapper.BookMapper;
@@ -57,7 +58,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAllByCategoryId(Long categoryId) {
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long categoryId) {
         return bookRepository.findAllByCategories_Id(categoryId);
     }
 

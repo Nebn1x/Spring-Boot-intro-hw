@@ -1,7 +1,6 @@
 package springboot.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,6 @@ import springboot.dto.category.CreateCategoryRequestDto;
 import springboot.exeptions.EntityNotFoundException;
 import springboot.mapper.BookMapper;
 import springboot.mapper.CategoryMapper;
-import springboot.model.Book;
 import springboot.model.Category;
 import springboot.repository.CategoryRepository;
 import springboot.service.BookService;
@@ -40,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto save(CategoryDto categoryDto) {
+    public CategoryDto save(CreateCategoryRequestDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         return categoryMapper.toDto(categoryRepository.save(category));
     }
@@ -64,9 +62,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id) {
-        List<Book> books = bookService.findAllByCategoryId(id);
-        return books.stream()
-                .map(bookMapper::toDtoWithoutCategories)
-                .collect(Collectors.toList());
+        return bookService.findAllByCategoryId(id);
     }
 }

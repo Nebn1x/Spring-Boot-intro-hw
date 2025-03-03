@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import springboot.dto.book.BookDto;
+import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.book.CreateBookRequestDto;
-import springboot.model.Book;
 
 public interface BookService {
 
@@ -19,6 +19,5 @@ public interface BookService {
 
     void deleteBookById(Long id);
 
-    List<Book> findAllByCategoryId(Long categoryId);
-
+    List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long categoryId);
 }

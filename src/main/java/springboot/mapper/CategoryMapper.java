@@ -12,7 +12,7 @@ public interface CategoryMapper {
 
     CategoryDto toDto(Category category);
 
-    Category toEntity(CategoryDto categoryDto);
+    Category toEntity(CreateCategoryRequestDto requestDto);
 
     void updateCategoryFromDto(CreateCategoryRequestDto requestDto,
                                @MappingTarget Category category);

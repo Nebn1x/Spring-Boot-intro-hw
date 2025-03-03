@@ -11,10 +11,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -34,12 +32,10 @@ public class Category {
 
     @ManyToMany
     @JoinTable(
-            name = "book_category",
+            name = "books_categories",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Set<Book> books = new HashSet<>();
 
     private String description;

@@ -4,7 +4,7 @@ databaseChangeLog:
       author: root
       changes:
         - createTable:
-            tableName: book_category
+            tableName: books_categories
             columns:
               - column:
                   name: book_id
@@ -21,5 +21,5 @@ databaseChangeLog:
                     foreignKeyName: fk_book_category_category
                     references: categories(id)
         - addPrimaryKey:
-            tableName: book_category
+            tableName: books_categories
             columnNames: book_id, category_id
