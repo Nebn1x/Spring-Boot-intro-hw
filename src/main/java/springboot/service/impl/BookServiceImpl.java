@@ -58,7 +58,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findAllByCategoryId(Long categoryId) {
-        return bookRepository.findAllByCategoryId(categoryId);
+        return bookRepository.findAllByCategories_Id(categoryId);
     }
 
 }
