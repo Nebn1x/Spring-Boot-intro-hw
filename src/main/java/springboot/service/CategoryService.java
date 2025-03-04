@@ -1,9 +1,7 @@
 package springboot.service;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.category.CategoryDto;
 import springboot.dto.category.CreateCategoryRequestDto;
 
@@ -18,6 +16,4 @@ public interface CategoryService {
     CategoryDto update(CreateCategoryRequestDto requestDto, Long id);
 
     void deleteById(Long id);
-
-    List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id);
 }

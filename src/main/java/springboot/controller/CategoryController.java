@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.category.CategoryDto;
 import springboot.dto.category.CreateCategoryRequestDto;
 import springboot.service.CategoryService;
@@ -64,7 +62,7 @@ public class CategoryController {
 
     @Operation(
             summary = "Get category by ID",
-            description = "Retrieves a category by its ID.",
+            description = "Return a category by its ID.",
             responses = {
                     @ApiResponse(responseCode = "200",
                             description = "Category retrieved successfully"),
@@ -114,21 +112,5 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
-    }
-
-    @Operation(
-            summary = "Get books by category ID",
-            description = "Retrieves all books associated with the specified category.",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "Books retrieved successfully"),
-                    @ApiResponse(responseCode = "404",
-                            description = "Category not found")
-            }
-    )
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/{id}/books")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
-        return categoryService.getBooksByCategoryId(id);
     }
 }

@@ -1,19 +1,15 @@
 package springboot.service.impl;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.category.CategoryDto;
 import springboot.dto.category.CreateCategoryRequestDto;
 import springboot.exeptions.EntityNotFoundException;
-import springboot.mapper.BookMapper;
 import springboot.mapper.CategoryMapper;
 import springboot.model.Category;
 import springboot.repository.CategoryRepository;
-import springboot.service.BookService;
 import springboot.service.CategoryService;
 
 @Service
@@ -21,8 +17,6 @@ import springboot.service.CategoryService;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-    private final BookService bookService;
-    private final BookMapper bookMapper;
 
     @Override
     public Page<CategoryDto> findAll(Pageable pageable) {
@@ -58,10 +52,5 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.deleteById(id);
         }
         throw new EntityNotFoundException("Cannot find Book with id: " + id);
-    }
-
-    @Override
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id) {
-        return bookService.findAllByCategoryId(id);
     }
 }
