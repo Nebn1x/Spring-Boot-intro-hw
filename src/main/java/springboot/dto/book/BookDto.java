@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -25,4 +26,5 @@ public class BookDto {
 
     private String coverImage;
 
+    private List<Long> categoryIds;
 }
