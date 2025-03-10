@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import springboot.dto.cartitem.AddCartItemRequestDto;
 import springboot.dto.cartitem.CartItemDto;
+import springboot.dto.cartitem.UpdateCartItemRequestDto;
 import springboot.dto.shoppingcart.ShoppingCartDto;
 import springboot.service.ShoppingCartService;
 
@@ -73,7 +74,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{id}")
     public CartItemDto updateCartItem(@PathVariable Long id,
-                                                @RequestBody AddCartItemRequestDto requestDto) {
+                                                @RequestBody UpdateCartItemRequestDto requestDto) {
         return shoppingCartService.updateCartItem(id, requestDto);
     }
 

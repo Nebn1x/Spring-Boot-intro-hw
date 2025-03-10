@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import springboot.dto.cartitem.AddCartItemRequestDto;
 import springboot.dto.cartitem.CartItemDto;
+import springboot.dto.cartitem.UpdateCartItemRequestDto;
 import springboot.dto.shoppingcart.ShoppingCartDto;
 import springboot.exeptions.EntityNotFoundException;
 import springboot.mapper.ShoppingCartMapper;
@@ -37,7 +38,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public CartItemDto updateCartItem(Long cartItemId, AddCartItemRequestDto requestDto) {
+    public CartItemDto updateCartItem(Long cartItemId, UpdateCartItemRequestDto requestDto) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Cart item not found: " + cartItemId));

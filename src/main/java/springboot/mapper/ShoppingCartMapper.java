@@ -5,6 +5,7 @@ import org.mapstruct.MappingTarget;
 import springboot.config.MapperConfig;
 import springboot.dto.cartitem.AddCartItemRequestDto;
 import springboot.dto.cartitem.CartItemDto;
+import springboot.dto.cartitem.UpdateCartItemRequestDto;
 import springboot.dto.shoppingcart.ShoppingCartDto;
 import springboot.model.CartItem;
 import springboot.model.ShoppingCart;
@@ -19,6 +20,6 @@ public interface ShoppingCartMapper {
 
     CartItem toModel(AddCartItemRequestDto requestDto);
 
-    void updateCartItemFromDto(AddCartItemRequestDto requestDto,
+    void updateCartItemFromDto(UpdateCartItemRequestDto requestDto,
                                @MappingTarget CartItem item);
 }
