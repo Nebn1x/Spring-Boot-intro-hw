@@ -7,6 +7,5 @@ import lombok.Data;
 public class AddCartItemRequestDto {
     @NotNull
     private Long bookId;
-    @NotNull
     private int quantity;
 }

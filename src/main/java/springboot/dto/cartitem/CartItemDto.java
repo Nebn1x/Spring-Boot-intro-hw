@@ -12,6 +12,5 @@ public class CartItemDto {
     private Long bookId;
     @NotBlank
     private String bookTitle;
-    @NotNull
     private int quantity;
 }

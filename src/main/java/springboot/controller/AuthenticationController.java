@@ -61,4 +61,3 @@ public class AuthenticationController {
         return authenticationService.authenticate(requestDto);
     }
 }
-

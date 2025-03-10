@@ -3,7 +3,6 @@ package springboot.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +38,7 @@ public class ShoppingCartController {
     )
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
-    public AddCartItemRequestDto addToCart(@RequestBody @Valid CartItemDto requestDto) {
+    public CartItemDto addToCart(@RequestBody AddCartItemRequestDto requestDto) {
         return shoppingCartService.addToCart(requestDto);
     }
 
@@ -73,8 +72,8 @@ public class ShoppingCartController {
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{id}")
-    public AddCartItemRequestDto updateCartItem(@PathVariable Long id,
-                                                @RequestBody @Valid CartItemDto requestDto) {
+    public CartItemDto updateCartItem(@PathVariable Long id,
+                                                @RequestBody AddCartItemRequestDto requestDto) {
         return shoppingCartService.updateCartItem(id, requestDto);
     }
 
@@ -97,4 +96,3 @@ public class ShoppingCartController {
         shoppingCartService.deleteCartItem(id);
     }
 }
-
