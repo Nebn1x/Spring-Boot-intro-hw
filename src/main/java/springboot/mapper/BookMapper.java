@@ -2,6 +2,7 @@ package springboot.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import springboot.config.MapperConfig;
 import springboot.dto.book.BookDto;
 import springboot.dto.book.BookDtoWithoutCategoryIds;
@@ -19,4 +20,10 @@ public interface BookMapper {
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
+    @Named("bookFromId")
+    default Book bookFromId(Long id) {
+        Book book = new Book();
+        book.setId(id);
+        return book;
+    }
 }

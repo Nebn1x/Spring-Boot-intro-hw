@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-shopping-cart
+      author: root
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: shopping_cart_id
+                  type: bigint
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: shopping_cart_id
+            referencedTableName: shopping_carts
+            referencedColumnNames: id
+            constraintName: fk_user_shopping_cart
