@@ -8,12 +8,13 @@ import springboot.exeptions.RegistrationException;
 import springboot.mapper.UserMapper;
 import springboot.model.User;
 import springboot.repository.UserRepository;
+import springboot.service.ShoppingCartService;
 import springboot.service.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
+    private final ShoppingCartService shoppingCartService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -25,6 +26,8 @@ public class UserServiceImpl implements UserService {
                     + requestDto.getEmail());
         }
         User user = userMapper.toModel(requestDto);
+        shoppingCartService.createShoppingCart(user);
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 }
