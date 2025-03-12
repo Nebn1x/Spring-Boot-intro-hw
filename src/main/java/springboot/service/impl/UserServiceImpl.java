@@ -1,5 +1,6 @@
 package springboot.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import springboot.dto.user.UserRegistrationRequestDto;
@@ -11,6 +12,7 @@ import springboot.repository.UserRepository;
 import springboot.service.ShoppingCartService;
 import springboot.service.UserService;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,9 +27,9 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("Can't register user with the email "
                     + requestDto.getEmail());
         }
-        User user = userMapper.toModel(requestDto);
+        User user = userRepository.save(userMapper.toModel(requestDto));
         shoppingCartService.createShoppingCart(user);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toUserResponse(user);
     }
 }
