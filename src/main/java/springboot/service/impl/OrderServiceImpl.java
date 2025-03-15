@@ -1,7 +1,6 @@
 package springboot.service.impl;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,6 @@ import springboot.mapper.OrderMapper;
 import springboot.model.Order;
 import springboot.model.OrderItem;
 import springboot.model.ShoppingCart;
-import springboot.repository.OrderItemRepository;
 import springboot.repository.OrderRepository;
 import springboot.repository.ShoppingCartRepository;
 import springboot.service.OrderService;
@@ -23,7 +21,6 @@ import springboot.service.OrderService;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-    private final OrderItemRepository orderItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
