@@ -35,15 +35,7 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalStateException("Shopping cart is empty");
         }
         Order order = orderMapper.toModel(requestDto);
-        Set<OrderItem> orderItems = cart.getCartItems().stream()
-                .map(cartItem -> {
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.setBook(cartItem.getBook());
-                    orderItem.setQuantity(cartItem.getQuantity());
-                    orderItem.setPrice(cartItem.getBook().getPrice());
-                    return orderItemRepository.save(orderItem);
-                })
-                .collect(Collectors.toSet());
+        Set<OrderItem> orderItems = orderMapper.toOrderItems(cart.getCartItems());
 
         order.setOrderItems(orderItems);
         return orderMapper.toDto(orderRepository.save(order));
