@@ -29,5 +29,4 @@ public class Category {
 
     @Column(name = "is_deleted", columnDefinition = "TINYINT", nullable = false)
     private boolean isDeleted = false;
-
 }
