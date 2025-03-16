@@ -1,5 +1,6 @@
 package springboot.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import springboot.repository.OrderItemRepository;
 import springboot.repository.OrderRepository;
 import springboot.service.OrderItemService;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
@@ -28,14 +30,11 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDto getItemByIdFromOrderId(Long orderId, Long itemId) {
-        if (orderRepository.existsById(orderId)) {
-            OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
-                    .orElseThrow(() ->
-                            new EntityNotFoundException("Item not found in order."
-                                    + " Order Id: " + orderId
-                                    + ", Item Id: " + itemId));
-            return orderItemMapper.toDto(orderItem);
-        }
-        throw new EntityNotFoundException("Order not found with id: " + orderId);
+        OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Item not found in order."
+                                + " Order Id: " + orderId
+                                + ", Item Id: " + itemId));
+        return orderItemMapper.toDto(orderItem);
     }
 }

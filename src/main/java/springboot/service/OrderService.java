@@ -10,7 +10,7 @@ public interface OrderService {
 
     OrderDto createOrder(Long userId, CreateOrderRequestDto requestDto);
 
-    Page<OrderDto> getAllOrders(Pageable pageable);
+    Page<OrderDto> getAllOrders(Pageable pageable, Long userId);
 
     OrderDto updateOrderStatus(Long orderId, Order.Status status);
 }

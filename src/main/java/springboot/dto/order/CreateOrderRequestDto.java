@@ -1,5 +1,4 @@
 package springboot.dto.order;
 
-public class CreateOrderRequestDto {
-    private String shippingAddress;
+public record CreateOrderRequestDto(String shippingAddress) {
 }

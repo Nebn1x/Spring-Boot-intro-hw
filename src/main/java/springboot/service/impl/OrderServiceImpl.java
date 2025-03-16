@@ -1,5 +1,6 @@
 package springboot.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,12 +36,14 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItems = orderMapper.toOrderItems(cart.getCartItems());
 
         order.setOrderItems(orderItems);
+        order.setTotal(calculateTotalPrice(orderItems));
+
         return orderMapper.toDto(orderRepository.save(order));
     }
 
     @Override
-    public Page<OrderDto> getAllOrders(Pageable pageable) {
-        return orderRepository.findAll(pageable)
+    public Page<OrderDto> getAllOrders(Pageable pageable, Long userId) {
+        return orderRepository.findByUserId(userId, pageable)
                 .map(orderMapper::toDto);
     }
 
@@ -51,5 +54,13 @@ public class OrderServiceImpl implements OrderService {
                         new EntityNotFoundException("Order not found for id: " + orderId));
         order.setStatus(status);
         return orderMapper.toDto(orderRepository.save(order));
+    }
+
+    private BigDecimal calculateTotalPrice(Set<OrderItem> orderItems) {
+        double total = orderItems.stream()
+                .mapToDouble(item -> item.getPrice()
+                        .doubleValue() * item.getQuantity())
+                .sum();
+        return BigDecimal.valueOf(total);
     }
 }

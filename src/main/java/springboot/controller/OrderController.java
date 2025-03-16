@@ -62,8 +62,9 @@ public class OrderController {
     )
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
-    public Page<OrderDto> getAllOrders(Pageable pageable) {
-        return orderService.getAllOrders(pageable);
+    public Page<OrderDto> getAllOrders(Pageable pageable, Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        return orderService.getAllOrders(pageable, userId);
     }
 
     @Operation(
@@ -119,5 +120,4 @@ public class OrderController {
                                                @PathVariable Long itemId) {
         return orderItemService.getItemByIdFromOrderId(orderId, itemId);
     }
-
 }

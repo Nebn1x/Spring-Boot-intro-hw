@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
@@ -35,7 +34,6 @@ public class Order {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -59,8 +57,10 @@ public class Order {
     private boolean isDeleted = false;
 
     public enum Status {
+        PENDING,
         COMPLETED,
-        DELIVERED,
-        PENDING
+        CANCELLED,
+        SHIPPED,
+        DELIVERED
     }
 }

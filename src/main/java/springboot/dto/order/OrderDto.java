@@ -3,13 +3,14 @@ package springboot.dto.order;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
-import springboot.model.OrderItem;
+import springboot.dto.orderitem.OrderItemDto;
+import springboot.model.Order;
 
 public class OrderDto {
     private Long id;
     private Long userId;
-    private Set<OrderItem> orderItems;
+    private Set<OrderItemDto> orderItems;
     private LocalDateTime orderDate;
     private BigDecimal total;
-    private String status;
+    private Order.Status status;
 }
