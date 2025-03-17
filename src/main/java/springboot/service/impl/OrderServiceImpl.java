@@ -11,6 +11,7 @@ import springboot.dto.order.CreateOrderRequestDto;
 import springboot.dto.order.OrderDto;
 import springboot.dto.order.OrderStatusRequestDto;
 import springboot.exeptions.EntityNotFoundException;
+import springboot.exeptions.OrderProcessingException;
 import springboot.mapper.OrderItemMapper;
 import springboot.mapper.OrderMapper;
 import springboot.model.Order;
@@ -35,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() ->
                         new EntityNotFoundException("Shopping cart not found for user: " + userId));
         if (cart.getCartItems().isEmpty()) {
-            throw new IllegalStateException("Shopping cart is empty");
+            throw new OrderProcessingException("Shopping cart is empty");
         }
         Order order = orderMapper.toModel(requestDto);
         Set<OrderItem> orderItems = orderItemMapper.toOrderItems(cart.getCartItems());
