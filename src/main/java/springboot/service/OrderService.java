@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import springboot.dto.order.CreateOrderRequestDto;
 import springboot.dto.order.OrderDto;
-import springboot.model.Order;
+import springboot.dto.order.OrderStatusRequestDto;
 
 public interface OrderService {
 
@@ -12,5 +12,5 @@ public interface OrderService {
 
     Page<OrderDto> getAllOrders(Pageable pageable, Long userId);
 
-    OrderDto updateOrderStatus(Long orderId, Order.Status status);
+    OrderDto updateOrderStatus(Long orderId, OrderStatusRequestDto requestDto);
 }

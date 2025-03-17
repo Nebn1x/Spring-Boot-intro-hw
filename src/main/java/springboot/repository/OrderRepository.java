@@ -10,4 +10,3 @@ import springboot.model.Order;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByUserId(Long userId, Pageable pageable);
 }
-

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springboot.dto.order.CreateOrderRequestDto;
 import springboot.dto.order.OrderDto;
+import springboot.dto.order.OrderStatusRequestDto;
 import springboot.dto.orderitem.OrderItemDto;
-import springboot.model.Order;
 import springboot.model.User;
 import springboot.service.OrderItemService;
 import springboot.service.OrderService;
@@ -82,8 +82,9 @@ public class OrderController {
     )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{id}")
-    public OrderDto updateOrderStatus(@PathVariable Long id, Order.Status status) {
-        return orderService.updateOrderStatus(id, status);
+    public OrderDto updateOrderStatus(@PathVariable Long id,
+                                      @RequestBody OrderStatusRequestDto requestDto) {
+        return orderService.updateOrderStatus(id, requestDto);
     }
 
     @Operation(
