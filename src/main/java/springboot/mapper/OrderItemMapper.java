@@ -1,5 +1,6 @@
 package springboot.mapper;
 
+import java.util.Set;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -7,8 +8,6 @@ import springboot.config.MapperConfig;
 import springboot.dto.orderitem.OrderItemDto;
 import springboot.model.CartItem;
 import springboot.model.OrderItem;
-
-import java.util.Set;
 
 @Mapper(config = MapperConfig.class)
 public interface OrderItemMapper {
