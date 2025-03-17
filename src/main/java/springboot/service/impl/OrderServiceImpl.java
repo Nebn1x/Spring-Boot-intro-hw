@@ -1,6 +1,7 @@
 package springboot.service.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import springboot.dto.order.CreateOrderRequestDto;
 import springboot.dto.order.OrderDto;
 import springboot.dto.order.OrderStatusRequestDto;
+import springboot.dto.orderitem.OrderItemDto;
 import springboot.exeptions.EntityNotFoundException;
 import springboot.exeptions.OrderProcessingException;
 import springboot.mapper.OrderItemMapper;
@@ -17,6 +19,7 @@ import springboot.mapper.OrderMapper;
 import springboot.model.Order;
 import springboot.model.OrderItem;
 import springboot.model.ShoppingCart;
+import springboot.repository.OrderItemRepository;
 import springboot.repository.OrderRepository;
 import springboot.repository.ShoppingCartRepository;
 import springboot.service.OrderService;
@@ -27,6 +30,7 @@ import springboot.service.OrderService;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
     private final ShoppingCartRepository shoppingCartRepository;
 
@@ -36,7 +40,8 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() ->
                         new EntityNotFoundException("Shopping cart not found for user: " + userId));
         if (cart.getCartItems().isEmpty()) {
-            throw new OrderProcessingException("Shopping cart is empty");
+            throw new OrderProcessingException("Shopping cart (ID: " + cart.getId() + ")"
+                    + " is empty for user: " + userId);
         }
         Order order = orderMapper.toModel(requestDto);
         Set<OrderItem> orderItems = orderItemMapper.toOrderItems(cart.getCartItems());
@@ -60,6 +65,24 @@ public class OrderServiceImpl implements OrderService {
                         new EntityNotFoundException("Order not found for id: " + orderId));
         order.setStatus(requestDto.getStatus());
         return orderMapper.toDto(orderRepository.save(order));
+    }
+
+    @Override
+    public List<OrderItemDto> getItemsByOrderId(Long orderId) {
+        return orderItemRepository.findAllByOrderId(orderId)
+                .stream()
+                .map(orderItemMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public OrderItemDto getItemByIdFromOrderId(Long orderId, Long itemId) {
+        OrderItem orderItem = orderItemRepository.findByIdAndOrderId(itemId, orderId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Item not found in order."
+                                + " Order Id: " + orderId
+                                + ", Item Id: " + itemId));
+        return orderItemMapper.toDto(orderItem);
     }
 
     private BigDecimal calculateTotalPrice(Set<OrderItem> orderItems) {

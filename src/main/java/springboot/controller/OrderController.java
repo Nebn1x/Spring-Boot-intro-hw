@@ -21,7 +21,6 @@ import springboot.dto.order.OrderDto;
 import springboot.dto.order.OrderStatusRequestDto;
 import springboot.dto.orderitem.OrderItemDto;
 import springboot.model.User;
-import springboot.service.OrderItemService;
 import springboot.service.OrderService;
 
 @Tag(name = "Orders", description = "Operations related to Orders")
@@ -30,7 +29,6 @@ import springboot.service.OrderService;
 @RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
-    private final OrderItemService orderItemService;
 
     @Operation(
             summary = "Create a new order",
@@ -100,7 +98,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}/items")
     public List<OrderItemDto> getItemsByOrderId(@PathVariable Long id) {
-        return orderItemService.getItemsByOrderId(id);
+        return orderService.getItemsByOrderId(id);
     }
 
     @Operation(
@@ -119,6 +117,6 @@ public class OrderController {
     @GetMapping("/{Id}/items/{itemId}")
     public OrderItemDto getItemByIdFromOrderId(@PathVariable Long orderId,
                                                @PathVariable Long itemId) {
-        return orderItemService.getItemByIdFromOrderId(orderId, itemId);
+        return orderService.getItemByIdFromOrderId(orderId, itemId);
     }
 }

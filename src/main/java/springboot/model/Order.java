@@ -53,7 +53,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;
 
-    @Column(name = "is_deleted", columnDefinition = "TINYINT", nullable = false)
+    @Column(columnDefinition = "TINYINT", nullable = false)
     private boolean isDeleted = false;
 
     public enum Status {
