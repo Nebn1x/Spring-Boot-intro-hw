@@ -23,6 +23,9 @@ services:
     image: book-service
     build: .
     env_file: ./.env
+    ports:
+      - "$SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT"
+      - "$DEBUG_PORT:$DEBUG_PORT"
     environment:
       SPRING_APPLICATION_JSON: '{
          "spring.datasource.url"  : "jdbc:mysql://localhost:3306/spring",
@@ -30,4 +33,4 @@ services:
         "spring.datasource.password" : "$MYSQLDB_PASSWORD",
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect"
       }'
-      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:{$DEBUG_PORT}"
