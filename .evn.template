@@ -1,0 +1,11 @@
+MYSQLDB_USER=mysql_username
+MYSQLDB_PASSWORD=mysql_password
+MYSQLDB_ROOT_PASSWORD=mysql_root_password
+MYSQLDB_DATABASE=database_name
+
+MYSQLDB_LOCAL_PORT=mysql_host_port
+MYSQLDB_DOCKER_PORT=mysql_container_port
+
+SPRING_LOCAL_PORT=host_machine_port
+SPRING_DOCKER_PORT=container_port
+DEBUG_PORT=debug_port
