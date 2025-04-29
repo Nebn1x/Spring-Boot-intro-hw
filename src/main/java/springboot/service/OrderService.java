@@ -1,6 +1,5 @@
 package springboot.service;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import springboot.dto.order.CreateOrderRequestDto;
@@ -16,7 +15,7 @@ public interface OrderService {
 
     OrderDto updateOrderStatus(Long orderId, OrderStatusRequestDto requestDto);
 
-    List<OrderItemDto> getItemsByOrderId(Long orderId);
+    Page<OrderItemDto> getItemsByOrderId(Pageable pageable, Long orderId);
 
     OrderItemDto getItemByIdFromOrderId(Long orderId, Long itemId);
 }

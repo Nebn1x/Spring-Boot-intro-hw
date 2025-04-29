@@ -25,7 +25,7 @@ import springboot.service.ShoppingCartService;
 @Tag(name = "ShoppingCart", description = "Operations related to shopping_carts")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/carts")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
@@ -39,7 +39,7 @@ public class ShoppingCartController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ShoppingCartDto addToCart(Authentication authentication,
                                      @RequestBody @Valid AddCartItemRequestDto requestDto) {
@@ -57,9 +57,10 @@ public class ShoppingCartController {
                             description = "Cart not found")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
-    public ShoppingCartDto getCart(@PathVariable Long userId) {
+    public ShoppingCartDto getCart(Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
         return shoppingCartService.getCartById(userId);
     }
 
@@ -75,11 +76,12 @@ public class ShoppingCartController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/{id}")
-    public ShoppingCartDto updateCartItem(@PathVariable Long id,
+    public ShoppingCartDto updateCartItem(Authentication authentication, @PathVariable Long id,
                                                 @RequestBody UpdateCartItemRequestDto requestDto) {
-        return shoppingCartService.updateCartItem(id, requestDto);
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        return shoppingCartService.updateCartItem(userId, id, requestDto);
     }
 
     @Operation(
@@ -94,10 +96,11 @@ public class ShoppingCartController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable Long id) {
-        shoppingCartService.deleteCartItem(id);
+    @DeleteMapping("/items/{id}")
+    public void deleteItem(Authentication authentication, @PathVariable Long id) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        shoppingCartService.deleteCartItem(userId, id);
     }
 }

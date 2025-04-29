@@ -40,7 +40,7 @@ public class BookController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public Page<BookDto> getAll(Pageable pageable) {
         return bookService.getAll(pageable);
@@ -56,7 +56,7 @@ public class BookController {
                             description = "Book not found")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
@@ -70,7 +70,7 @@ public class BookController {
                     @ApiResponse(responseCode = "403", description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public BookDto createBook(
             @RequestBody @Valid CreateBookRequestDto requestDto) {
@@ -89,7 +89,7 @@ public class BookController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{id}")
     public BookDto updateBookById(@RequestBody @Valid CreateBookRequestDto requestDto,
             @PathVariable Long id) {
@@ -108,7 +108,7 @@ public class BookController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteBookById(@PathVariable Long id) {
@@ -125,7 +125,7 @@ public class BookController {
                             description = "Category not found")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}/books")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
         return bookService.getBooksByCategoryId(id);

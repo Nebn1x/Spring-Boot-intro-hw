@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-shopping_carts-to-users
+      author: root
+      changes:
+        - insert:
+            tableName: shopping_carts
+            columns:
+              - column:
+                  name: user_id
+                  value: "1"
+              - column:
+                  name: id
+                  value: "1"
+        - insert:
+            tableName: shopping_carts
+            columns:
+              - column:
+                  name: user_id
+                  value: "2"
+              - column:
+                  name: id
+                  value: "2"
+        - insert:
+            tableName: shopping_carts
+            columns:
+              - column:
+                  name: user_id
+                  value: "3"
+              - column:
+                  name: id
+                  value: "3"

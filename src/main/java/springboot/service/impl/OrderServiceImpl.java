@@ -1,7 +1,6 @@
 package springboot.service.impl;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<OrderDto> getAllOrders(Pageable pageable, Long userId) {
-        return orderRepository.findByUserId(userId, pageable)
+        return orderRepository.findAllByUserId(userId, pageable)
                 .map(orderMapper::toDto);
     }
 
@@ -62,17 +61,15 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto updateOrderStatus(Long orderId, OrderStatusRequestDto requestDto) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Order not found for id: " + orderId));
+                        new EntityNotFoundException("Order not found for: " + orderId));
         order.setStatus(requestDto.getStatus());
         return orderMapper.toDto(orderRepository.save(order));
     }
 
     @Override
-    public List<OrderItemDto> getItemsByOrderId(Long orderId) {
-        return orderItemRepository.findAllByOrderId(orderId)
-                .stream()
-                .map(orderItemMapper::toDto)
-                .toList();
+    public Page<OrderItemDto> getItemsByOrderId(Pageable pageable, Long orderId) {
+        return orderItemRepository.findAllByOrderId(orderId, pageable)
+                .map(orderItemMapper::toDto);
     }
 
     @Override

@@ -64,14 +64,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBookById(Long id) {
-        if (bookRepository.existsById(id)) {
+        if (!bookRepository.existsById(id)) {
             bookRepository.deleteById(id);
         }
         throw new EntityNotFoundException("Cannot find Book with id: " + id);
     }
 
-    @Override
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long categoryId) {
-        return bookRepository.findAllByCategories_Id(categoryId);
+        return bookRepository.findByCategories_Id(categoryId)
+                .stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
     }
 }

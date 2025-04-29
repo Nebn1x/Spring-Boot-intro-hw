@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +39,7 @@ public class OrderController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public OrderDto createOrder(Authentication authentication,
                                 @RequestBody @Valid CreateOrderRequestDto requestDto) {
@@ -58,7 +57,7 @@ public class OrderController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public Page<OrderDto> getAllOrders(Pageable pageable, Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
@@ -78,7 +77,7 @@ public class OrderController {
                             description = "Forbidden")
             }
     )
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{id}")
     public OrderDto updateOrderStatus(@PathVariable Long id,
                                       @RequestBody OrderStatusRequestDto requestDto) {
@@ -95,10 +94,10 @@ public class OrderController {
                             description = "Order not found")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}/items")
-    public List<OrderItemDto> getItemsByOrderId(@PathVariable Long id) {
-        return orderService.getItemsByOrderId(id);
+    public Page<OrderItemDto> getItemsByOrderId(Pageable pageable, @PathVariable Long id) {
+        return orderService.getItemsByOrderId(pageable, id);
     }
 
     @Operation(
@@ -113,7 +112,7 @@ public class OrderController {
                             description = "Order not found")
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{Id}/items/{itemId}")
     public OrderItemDto getItemByIdFromOrderId(@PathVariable Long orderId,
                                                @PathVariable Long itemId) {

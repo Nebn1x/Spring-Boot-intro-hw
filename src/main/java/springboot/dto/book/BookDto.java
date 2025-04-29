@@ -21,10 +21,7 @@ public class BookDto {
     @NotNull
     @Min(0)
     private BigDecimal price;
-
     private String description;
-
     private String coverImage;
-
     private List<Long> categoryIds;
 }

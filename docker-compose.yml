@@ -1,6 +1,5 @@
 services:
   mysqldb:
-    platform: linux/arm64
     image: mysql:latest
     restart: unless-stopped
     env_file: ./.env
@@ -13,21 +12,23 @@ services:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 30s
       timeout: 30s
-      retries: 3
+      retries: 10
   app:
     depends_on:
-      mysqldb:
-        condition: service_healthy
+      - mysqldb
     restart: on-failure
     image: book-service
     build: .
     env_file: ./.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/spring",
+        "spring.datasource.username": "${MYSQLDB_USER}",
+        "spring.datasource.password": "${MYSQLDB_PASSWORD}",
+        "jwt.expiration": "${JWT_EXPIRATION}",
+        "jwt.secret": "${JWT_SECRET}"
+      }'
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT"
     ports:
       - "$SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT"
       - "$DEBUG_PORT:$DEBUG_PORT"
-    environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysqldb:${MYSQLDB_DOCKER_PORT}/${MYSQLDB_DATABASE}"
-      SPRING_DATASOURCE_USERNAME: "${MYSQLDB_USER}"
-      SPRING_DATASOURCE_PASSWORD: "${MYSQLDB_PASSWORD}"
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQL8Dialect"
-      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT"

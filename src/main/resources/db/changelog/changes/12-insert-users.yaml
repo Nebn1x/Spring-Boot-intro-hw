@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: root
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "john.doe@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$5gcQPMxcnslw4QQkKGUU/eibvgXG9e4Od1ZE5A8DGprpOCS9ZfWRG"
+              - column:
+                  name: first_name
+                  value: "John"
+              - column:
+                  name: last_name
+                  value: "Doe"
+              - column:
+                  name: shipping_address
+                  value: "123 Main St, Springfield, IL"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "jane.smith@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$MciJPpHrd8psQfrFmYyBc.j2PGf5k9xP/sOrNuT9pUwac6ah9vzw6"
+              - column:
+                  name: first_name
+                  value: "Jane"
+              - column:
+                  name: last_name
+                  value: "Smith"
+              - column:
+                  name: shipping_address
+                  value: "456 Oak St, Lincoln, NE"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "alice.jones@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$5gcQPMxcnslw4QQkKGUU/eibvgXG9e4Od1ZE5A8DGprpOCS9ZfWRG"
+              - column:
+                  name: first_name
+                  value: "Alice"
+              - column:
+                  name: last_name
+                  value: "Jones"
+              - column:
+                  name: shipping_address
+                  value: "789 Pine St, Omaha, NE"
