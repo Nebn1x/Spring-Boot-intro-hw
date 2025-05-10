@@ -40,7 +40,9 @@ public class CategoryController {
     )
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public CategoryDto createCategory(@RequestBody @Valid CreateCategoryRequestDto requestDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryDto createCategory(
+            @RequestBody @Valid CreateCategoryRequestDto requestDto) {
         return categoryService.save(requestDto);
     }
 
@@ -73,7 +75,7 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}")
     public CategoryDto getCategoryById(@PathVariable Long id) {
-        return categoryService.getById(id);
+        return categoryService.getCategoryById(id);
     }
 
     @Operation(
@@ -90,9 +92,9 @@ public class CategoryController {
     )
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{id}")
-    public CategoryDto updateCategory(@RequestBody @Valid CreateCategoryRequestDto requestDto,
+    public CategoryDto updateCategoryById(@RequestBody @Valid CreateCategoryRequestDto requestDto,
             @PathVariable Long id) {
-        return categoryService.update(requestDto, id);
+        return categoryService.updateCategoryById(requestDto, id);
     }
 
     @Operation(
@@ -110,7 +112,7 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id) {
-        categoryService.deleteById(id);
+    public void deleteCategoryById(@PathVariable Long id) {
+        categoryService.deleteCategoryById(id);
     }
 }

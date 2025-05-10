@@ -9,11 +9,11 @@ public interface CategoryService {
 
     Page<CategoryDto> findAll(Pageable pageable);
 
-    CategoryDto getById(Long id);
+    CategoryDto getCategoryById(Long id);
 
     CategoryDto save(CreateCategoryRequestDto categoryDto);
 
-    CategoryDto update(CreateCategoryRequestDto requestDto, Long id);
+    CategoryDto updateCategoryById(CreateCategoryRequestDto requestDto, Long id);
 
-    void deleteById(Long id);
+    void deleteCategoryById(Long id);
 }

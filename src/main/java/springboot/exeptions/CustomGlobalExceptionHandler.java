@@ -41,6 +41,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleRegistrationException(
+            EntityNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(OrderProcessingException.class)
     public ResponseEntity<Object> handleIllegalStateException(
             OrderProcessingException ex) {
