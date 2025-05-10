@@ -1,5 +1,9 @@
 package springboot.mapper;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -10,11 +14,6 @@ import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.book.CreateBookRequestDto;
 import springboot.model.Book;
 import springboot.model.Category;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {

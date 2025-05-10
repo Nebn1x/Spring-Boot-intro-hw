@@ -1,19 +1,13 @@
 package springboot.testutil;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import springboot.dto.book.BookDto;
-import springboot.dto.book.CreateBookRequestDto;
 import springboot.dto.category.CategoryDto;
 import springboot.dto.category.CreateCategoryRequestDto;
-import springboot.model.Book;
 import springboot.model.Category;
 
 public class CategoryUtil {
@@ -36,7 +30,6 @@ public class CategoryUtil {
         category.setName(requestDto.getName());
         category.setDescription(requestDto.getDescription());
         category.setDeleted(false);
-
         return category;
     }
 
@@ -56,15 +49,14 @@ public class CategoryUtil {
         categoryDto1.setDescription("Description1");
 
         CategoryDto categoryDto2 = new CategoryDto();
-        categoryDto1.setId(102L);
-        categoryDto1.setName("Category2");
-        categoryDto1.setDescription("Description2");
+        categoryDto2.setId(102L);
+        categoryDto2.setName("Category2");
+        categoryDto2.setDescription("Description2");
 
         CategoryDto categoryDto3 = new CategoryDto();
-        categoryDto1.setId(103L);
-        categoryDto1.setName("Category3");
-        categoryDto1.setDescription("Description3");
-
+        categoryDto3.setId(103L);
+        categoryDto3.setName("Category3");
+        categoryDto3.setDescription("Description3");
         return List.of(categoryDto1, categoryDto2, categoryDto3);
     }
 

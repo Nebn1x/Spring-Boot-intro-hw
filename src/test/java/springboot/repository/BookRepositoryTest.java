@@ -26,7 +26,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("Should find books by existing category ID")
     void findByCategoriesId_shouldReturnBooksForCategory() {
-        Long categoryId = 1L;
+        Long categoryId = 101L;
 
         List<Book> books = bookRepository.findByCategories_Id(categoryId);
 
@@ -39,10 +39,10 @@ class BookRepositoryTest {
     @Test
     @DisplayName("Should return empty list for non-existing category ID")
     void findByCategoriesId_CategoryDoesNotExist_ReturnEmptyList() {
-        Long nonExistingCategoryId = 999L;
+        Long categoryId = 999L;
 
         List<Book> actualBooks =
-                bookRepository.findByCategories_Id(nonExistingCategoryId);
+                bookRepository.findByCategories_Id(categoryId);
 
         assertThat(actualBooks).isEmpty();
     }

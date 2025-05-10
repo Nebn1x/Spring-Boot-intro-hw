@@ -1,36 +1,33 @@
 package springboot.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static springboot.testutil.BookUtil.getBookDto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import javax.sql.DataSource;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -39,13 +36,7 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import springboot.dto.book.BookDto;
 import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.book.CreateBookRequestDto;
-import springboot.model.Book;
 import springboot.testutil.BookUtil;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookControllerTest {
@@ -85,7 +76,7 @@ public class BookControllerTest {
 
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     @Test
-    @DisplayName("Сreate a book with valid parameters")
+    @DisplayName("Create a book with valid parameters")
     void createBook_ValidData_Success() throws Exception {
         CreateBookRequestDto requestDto = BookUtil.createBookRequestDto();
         BookDto expected = BookUtil.createBookDto(BookUtil.getBook(requestDto));
@@ -93,16 +84,16 @@ public class BookControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         MvcResult result = mockMvc.perform(
-                post("/books")
-                .content(jsonRequest)
-                        .contentType(MediaType.APPLICATION_JSON)
-        )
+                        post("/books")
+                                .content(jsonRequest)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isCreated())
                 .andReturn();
 
         BookDto actual = objectMapper.readValue(result
-                        .getResponse()
-                        .getContentAsString(), BookDto.class);
+                .getResponse()
+                .getContentAsString(), BookDto.class);
         Assertions.assertNotNull(actual);
         Assertions.assertNotNull(actual.getId());
         EqualsBuilder.reflectionEquals(expected, actual);
@@ -139,7 +130,7 @@ public class BookControllerTest {
     @WithMockUser(username = "user", authorities = {"USER"})
     void getBook_ByValidId_ReturnBookDto() throws Exception {
         Long bookId = 101L;
-        BookDto expectedDto = getBookDto(bookId);
+        BookDto expectedDto = BookUtil.getBookDto(bookId);
 
         MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -161,13 +152,13 @@ public class BookControllerTest {
     void updateBook_ValidData_ReturnUpdatedBookDto() throws Exception {
         Long bookId = 101L;
 
-        BookDto expectedDto = getBookDto(bookId);
+        BookDto expectedDto = BookUtil.getBookDto(bookId);
         CreateBookRequestDto requestDto = BookUtil.createBookRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
         MvcResult result = mockMvc.perform(post("/books/{id}", bookId)
-                    .content(jsonRequest)
-                    .contentType(MediaType.APPLICATION_JSON))
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 

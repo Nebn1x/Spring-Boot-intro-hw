@@ -69,7 +69,7 @@ public class BookServiceTest {
         when(bookMapper.toModel(requestDto)).thenReturn(book);
         when(bookRepository.save(book)).thenReturn(book);
         when(bookMapper.toDto(book)).thenReturn(bookDto);
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(categoryRepository.findById(101L)).thenReturn(Optional.of(category));
         BookDto saveBook = bookService.createBook(requestDto);
 
         assertThat(saveBook).isEqualTo(bookDto);

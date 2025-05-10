@@ -60,7 +60,7 @@ public class BookUtil {
         requestDto.setCoverImage("CoverImage");
 
         Category category = new Category();
-        category.setId(1L);
+        category.setId(101L);
         category.setName("1");
         category.setDescription("Description");
         category.setDeleted(false);
