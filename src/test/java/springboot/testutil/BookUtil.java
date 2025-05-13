@@ -1,6 +1,7 @@
 package springboot.testutil;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
@@ -45,7 +46,7 @@ public class BookUtil {
         bookDto.setPrice(book.getPrice());
         bookDto.setDescription(book.getDescription());
         bookDto.setCoverImage(book.getCoverImage());
-        bookDto.setCategoryIds(List.of(1L));
+        bookDto.setCategoryIds(List.of(101L));
 
         return bookDto;
     }
@@ -64,7 +65,25 @@ public class BookUtil {
         category.setName("1");
         category.setDescription("Description");
         category.setDeleted(false);
-        requestDto.setCategoryIds(List.of(1L));
+        requestDto.setCategoryIds(List.of(category.getId()));
+
+        return requestDto;
+    }
+
+    public static CreateBookRequestDto createUpdateBookRequestDto() {
+        CreateBookRequestDto requestDto = new CreateBookRequestDto();
+        requestDto.setTitle("NewBookTitle1");
+        requestDto.setAuthor("NewBookAuthor1");
+        requestDto.setIsbn("NewBookIsbn1");
+        requestDto.setPrice(BigDecimal.valueOf(150));
+        requestDto.setDescription("NewBookDescription1");
+        requestDto.setCoverImage("NewCoverImage1");
+
+        Category category = new Category();
+        category.setId(101L);
+        category.setName("1");
+        category.setDescription("Description");
+        category.setDeleted(false);
         requestDto.setCategoryIds(List.of(category.getId()));
 
         return requestDto;
@@ -106,12 +125,25 @@ public class BookUtil {
     }
 
     public static BookDto getBookDto(Long testId) {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(testId);
+        bookDto.setTitle("Title1");
+        bookDto.setAuthor("Author1");
+        bookDto.setIsbn("Isbn1");
+        bookDto.setPrice(BigDecimal.valueOf(100).setScale(2));
+        bookDto.setDescription("Description1");
+        bookDto.setCoverImage("CoverImage1");
+        bookDto.setCategoryIds(List.of(101L));
+        return bookDto;
+    }
+
+    public static BookDto getUpdateBookDto(Long testId) {
         String testTitle = "NewBookTitle1";
         String testAuthor = "NewBookAuthor1";
         String testIsbn = "NewBookIsbn1";
         String testDescription = "NewBookDescription1";
         String testCoverImage = "NewCoverImage1";
-        List<Long> testCategoryIds = List.of(1L);
+        List<Long> testCategoryIds = List.of(101L);
         BigDecimal testPrice = BigDecimal.valueOf(150);
 
         BookDto expectedDto = new BookDto();
@@ -132,30 +164,30 @@ public class BookUtil {
         book1.setTitle("Title1");
         book1.setAuthor("Author1");
         book1.setIsbn("Isbn1");
-        book1.setPrice(BigDecimal.valueOf(100));
+        book1.setPrice(BigDecimal.valueOf(100).setScale(1));
         book1.setDescription("Description1");
         book1.setCoverImage("CoverImage1");
-        book1.setCategoryIds(List.of(1L));
+        book1.setCategoryIds(List.of(101L));
 
         BookDto book2 = new BookDto();
         book2.setId(102L);
         book2.setTitle("Title2");
         book2.setAuthor("Author2");
         book2.setIsbn("Isbn2");
-        book2.setPrice(BigDecimal.valueOf(200));
+        book2.setPrice(BigDecimal.valueOf(200).setScale(1));
         book2.setDescription("Description2");
         book2.setCoverImage("CoverImage2");
-        book2.setCategoryIds(List.of(1L));
+        book2.setCategoryIds(List.of(101L));
 
         BookDto book3 = new BookDto();
         book3.setId(103L);
         book3.setTitle("Title3");
         book3.setAuthor("Author3");
         book3.setIsbn("Isbn3");
-        book3.setPrice(BigDecimal.valueOf(300));
+        book3.setPrice(BigDecimal.valueOf(300).setScale(1));
         book3.setDescription("Description3");
         book3.setCoverImage("CoverImage3");
-        book3.setCategoryIds(List.of(2L));
+        book3.setCategoryIds(List.of(102L));
 
         return List.of(book1, book2, book3);
     }
@@ -163,24 +195,24 @@ public class BookUtil {
     public static List<BookDtoWithoutCategoryIds> getBookDtoWithoutCategoryIds() {
         BookDtoWithoutCategoryIds bookDtoWithoutCategoryIds1
                 = new BookDtoWithoutCategoryIds();
-        bookDtoWithoutCategoryIds1.setId(1L);
+        bookDtoWithoutCategoryIds1.setId(101L);
         bookDtoWithoutCategoryIds1.setTitle("Title1");
         bookDtoWithoutCategoryIds1.setAuthor("Author1");
         bookDtoWithoutCategoryIds1.setIsbn("Isbn1");
-        bookDtoWithoutCategoryIds1.setPrice(BigDecimal.valueOf(100));
+        bookDtoWithoutCategoryIds1.setPrice(BigDecimal.valueOf(100).setScale(2));
         bookDtoWithoutCategoryIds1.setDescription("Description1");
         bookDtoWithoutCategoryIds1.setCoverImage("CoverImage1");
 
         BookDtoWithoutCategoryIds bookDtoWithoutCategoryIds2
                 = new BookDtoWithoutCategoryIds();
-        bookDtoWithoutCategoryIds2.setId(2L);
+        bookDtoWithoutCategoryIds2.setId(102L);
         bookDtoWithoutCategoryIds2.setTitle("Title2");
         bookDtoWithoutCategoryIds2.setAuthor("Author2");
         bookDtoWithoutCategoryIds2.setIsbn("Isbn2");
-        bookDtoWithoutCategoryIds2.setPrice(BigDecimal.valueOf(200));
+        bookDtoWithoutCategoryIds2.setPrice(BigDecimal.valueOf(200).setScale(2));
         bookDtoWithoutCategoryIds2.setDescription("Description2");
         bookDtoWithoutCategoryIds2.setCoverImage("CoverImage2");
 
-        return List.of(bookDtoWithoutCategoryIds1, bookDtoWithoutCategoryIds2);
+        return Arrays.asList(bookDtoWithoutCategoryIds1, bookDtoWithoutCategoryIds2);
     }
 }

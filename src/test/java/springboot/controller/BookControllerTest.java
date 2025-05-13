@@ -1,10 +1,22 @@
 package springboot.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static springboot.testutil.BookUtil.createBookDto;
+import static springboot.testutil.BookUtil.createBookRequestDto;
+import static springboot.testutil.BookUtil.createUpdateBookRequestDto;
+import static springboot.testutil.BookUtil.getBook;
+import static springboot.testutil.BookUtil.getBookDto;
+import static springboot.testutil.BookUtil.getBookDtoWithoutCategoryIds;
+import static springboot.testutil.BookUtil.getBooks;
+import static springboot.testutil.BookUtil.getUpdateBookDto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,7 +28,6 @@ import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +47,6 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import springboot.dto.book.BookDto;
 import springboot.dto.book.BookDtoWithoutCategoryIds;
 import springboot.dto.book.CreateBookRequestDto;
-import springboot.testutil.BookUtil;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookControllerTest {
@@ -78,8 +88,8 @@ public class BookControllerTest {
     @Test
     @DisplayName("Create a book with valid parameters")
     void createBook_ValidData_Success() throws Exception {
-        CreateBookRequestDto requestDto = BookUtil.createBookRequestDto();
-        BookDto expected = BookUtil.createBookDto(BookUtil.getBook(requestDto));
+        CreateBookRequestDto requestDto = createBookRequestDto();
+        BookDto expected = createBookDto(getBook(requestDto));
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
@@ -94,9 +104,23 @@ public class BookControllerTest {
         BookDto actual = objectMapper.readValue(result
                 .getResponse()
                 .getContentAsString(), BookDto.class);
-        Assertions.assertNotNull(actual);
-        Assertions.assertNotNull(actual.getId());
-        EqualsBuilder.reflectionEquals(expected, actual);
+        assertNotNull(actual);
+        assertNotNull(actual.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
+    }
+
+    @Test
+    @DisplayName("Create book with null")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void createBook_WithNull_ReturnException() throws Exception {
+        CreateBookRequestDto requestDto = new CreateBookRequestDto();
+
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
+        mockMvc.perform(post("/books")
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -104,7 +128,7 @@ public class BookControllerTest {
     @DisplayName("Get all books by existing data")
     void getAll_ValidData_ReturnPageBookDto() throws Exception {
         Pageable requestDto = Pageable.ofSize(3);
-        List<BookDto> expectedBooks = BookUtil.getBooks();
+        List<BookDto> expectedBooks = getBooks();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
@@ -122,7 +146,7 @@ public class BookControllerTest {
                 new TypeReference<>() {
                 }
         );
-        EqualsBuilder.reflectionEquals(expectedBooks, actualBooks, "id");
+        assertThat(actualBooks).usingRecursiveComparison().isEqualTo(expectedBooks);
     }
 
     @Test
@@ -130,7 +154,7 @@ public class BookControllerTest {
     @WithMockUser(username = "user", authorities = {"USER"})
     void getBook_ByValidId_ReturnBookDto() throws Exception {
         Long bookId = 101L;
-        BookDto expectedDto = BookUtil.getBookDto(bookId);
+        BookDto expectedDto = getBookDto(bookId);
 
         MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -141,9 +165,20 @@ public class BookControllerTest {
                 .getResponse()
                 .getContentAsString(), BookDto.class);
 
-        Assertions.assertNotNull(actualDto);
-        Assertions.assertNotNull(actualDto.getId());
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto);
+        assertNotNull(actualDto);
+        assertNotNull(actualDto.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto));
+    }
+
+    @Test
+    @DisplayName("Get book with invalid id")
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getBook_ByInvalidId_ReturnNotFound() throws Exception {
+        Long bookId = 999L;
+
+        mockMvc.perform(get("/books/{id}", bookId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -152,11 +187,11 @@ public class BookControllerTest {
     void updateBook_ValidData_ReturnUpdatedBookDto() throws Exception {
         Long bookId = 101L;
 
-        BookDto expectedDto = BookUtil.getBookDto(bookId);
-        CreateBookRequestDto requestDto = BookUtil.createBookRequestDto();
+        BookDto expectedDto = getUpdateBookDto(bookId);
+        CreateBookRequestDto requestDto = createUpdateBookRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-        MvcResult result = mockMvc.perform(post("/books/{id}", bookId)
+        MvcResult result = mockMvc.perform(put("/books/{id}", bookId)
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -166,9 +201,25 @@ public class BookControllerTest {
                 .getResponse()
                 .getContentAsString(), BookDto.class);
 
-        Assertions.assertNotNull(actualDto);
-        Assertions.assertNotNull(actualDto.getId());
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto);
+        assertNotNull(actualDto);
+        assertNotNull(actualDto.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto));
+    }
+
+    @Test
+    @DisplayName("Update book with invalid id")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void updateBook_InvalidId_ReturnNotFound() throws Exception {
+        Long bookId = 999L;
+
+        CreateBookRequestDto requestDto = createBookRequestDto();
+
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
+        mockMvc.perform(put("/books/{id}", bookId)
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -184,13 +235,34 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Get books by category ID")
+    @DisplayName("Delete book with invalid id")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void deleteBook_InvalidId_ReturnNotFound() throws Exception {
+        Long bookId = 999L;
+
+        mockMvc.perform(delete("/books/{id}", bookId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Get books by invalid id")
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getBooksByCategoryId_InvalidId_ReturnNotFound() throws Exception {
+        Long categoryId = 999L;
+
+        mockMvc.perform(get("/books/{id}/books", categoryId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Get books by category id")
     @WithMockUser(username = "user", authorities = {"USER"})
     void getBooksByCategoryId_ValidCategoryId_ReturnBooks() throws Exception {
-        Long categoryId = 1L;
+        Long categoryId = 101L;
 
-        List<BookDtoWithoutCategoryIds> expectedDtos = BookUtil.getBookDtoWithoutCategoryIds();
-
+        List<BookDtoWithoutCategoryIds> expectedDtos = getBookDtoWithoutCategoryIds();
         MvcResult result = mockMvc.perform(get("/books/{id}/books", categoryId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -200,8 +272,7 @@ public class BookControllerTest {
                 .readValue(result.getResponse()
                         .getContentAsString(), objectMapper.getTypeFactory()
                         .constructCollectionType(List.class, BookDtoWithoutCategoryIds.class));
-
-        EqualsBuilder.reflectionEquals(expectedDtos, actualDtos);
+        assertThat(actualDtos).usingRecursiveComparison().isEqualTo(expectedDtos);
     }
 
     @AfterEach

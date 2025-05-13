@@ -15,7 +15,7 @@ public class CategoryUtil {
     public static Category createCategory() {
         Long id = 1L;
         String name = "1";
-        String description = "Description";
+        String description = "Description1";
         Category category = new Category();
         category.setId(id);
         category.setName(name);
@@ -34,8 +34,17 @@ public class CategoryUtil {
     }
 
     public static CreateCategoryRequestDto createCategoryRequestDto() {
-        String name = "Category1";
-        String description = "Description";
+        String name = "1";
+        String description = "Description1";
+        CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto();
+        requestDto.setName(name);
+        requestDto.setDescription(description);
+        return requestDto;
+    }
+
+    public static CreateCategoryRequestDto createNewCategoryRequestDto() {
+        String name = "1Name";
+        String description = "Description1";
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto();
         requestDto.setName(name);
         requestDto.setDescription(description);
@@ -45,24 +54,20 @@ public class CategoryUtil {
     public static List<CategoryDto> getCategories() {
         CategoryDto categoryDto1 = new CategoryDto();
         categoryDto1.setId(101L);
-        categoryDto1.setName("Category1");
+        categoryDto1.setName("1");
         categoryDto1.setDescription("Description1");
 
         CategoryDto categoryDto2 = new CategoryDto();
         categoryDto2.setId(102L);
-        categoryDto2.setName("Category2");
+        categoryDto2.setName("2");
         categoryDto2.setDescription("Description2");
 
-        CategoryDto categoryDto3 = new CategoryDto();
-        categoryDto3.setId(103L);
-        categoryDto3.setName("Category3");
-        categoryDto3.setDescription("Description3");
-        return List.of(categoryDto1, categoryDto2, categoryDto3);
+        return List.of(categoryDto1, categoryDto2);
     }
 
     public static CategoryDto getCategoryDto(Long testId) {
-        String testName = "NewCategoryName1";
-        String testDescription = "NewCategoryDescription1";
+        String testName = "1";
+        String testDescription = "Description1";
 
         CategoryDto expectedDto = new CategoryDto();
         expectedDto.setId(testId);

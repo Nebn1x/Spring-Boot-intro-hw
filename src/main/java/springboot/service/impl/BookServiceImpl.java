@@ -71,6 +71,9 @@ public class BookServiceImpl implements BookService {
     }
 
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Cannot find Books by category id: " + categoryId);
+        }
         return bookRepository.findByCategories_Id(categoryId)
                 .stream()
                 .map(bookMapper::toDtoWithoutCategories)

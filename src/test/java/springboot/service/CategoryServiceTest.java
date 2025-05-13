@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,7 +64,7 @@ public class CategoryServiceTest {
 
         assertThat(savedCategory).isEqualTo(categoryDto);
         assertThat(savedCategory).isNotNull();
-        verify(categoryRepository, times(1)).save(category);
+        verify(categoryRepository).save(category);
     }
 
     @DisplayName("Throws NullPointerException when has is null")
@@ -112,7 +111,7 @@ public class CategoryServiceTest {
     @Test
     void getCategoryById_WithNonExistingId_ThrowException() {
         String exceptionMs = "Cannot find Category with id: ";
-        Long categoryId = 99L;
+        Long categoryId = 999L;
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 
@@ -153,7 +152,7 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Throw EntityNotFoundException when Category does not exist")
     void updateCategory_WithInvalidId_ThrowException() {
-        Long categoryId = 99L;
+        Long categoryId = 999L;
         CreateCategoryRequestDto updateCategoryDto = CategoryUtil.createCategoryRequestDto();
         updateCategoryDto.setDescription("Updated Description");
         updateCategoryDto.setName("Updated Name");
@@ -181,7 +180,7 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Throw EntityNotFoundException when Category does not exist")
     void deleteById_WithInvalidId_ThrowException() {
-        Long categoryId = 99L;
+        Long categoryId = 999L;
         String expectedMessage = "Cannot find Category with id: " + categoryId;
 
         when(categoryRepository.existsById(categoryId)).thenReturn(false);

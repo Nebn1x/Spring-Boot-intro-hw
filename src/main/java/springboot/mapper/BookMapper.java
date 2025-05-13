@@ -45,7 +45,7 @@ public interface BookMapper {
         }
         return categories.stream()
                 .map(Category::getId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Named("categoriesFromIds")

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -74,7 +73,7 @@ public class BookServiceTest {
 
         assertThat(saveBook).isEqualTo(bookDto);
         assertThat(saveBook).isNotNull();
-        verify(bookRepository, times(1)).save(book);
+        verify(bookRepository).save(book);
     }
 
     @DisplayName("Throws NullPointerException when has is null")
@@ -93,7 +92,7 @@ public class BookServiceTest {
     @DisplayName("Create book with invalid category id throws EntityNotFoundException")
     @Test
     void createBook_WithInvalidCategoryId_ThrowException() {
-        Long invalidCategoryId = 99L;
+        Long invalidCategoryId = 999L;
         String exceptionMessage = "Category not found with id: ";
 
         requestDto.setCategoryIds(List.of(invalidCategoryId));
@@ -176,7 +175,7 @@ public class BookServiceTest {
     @Test
     @DisplayName("Throw EntityNotFoundException when book does not exist")
     void updateBook_WithInvalidId_ThrowException() {
-        Long bookId = 99L;
+        Long bookId = 999L;
         CreateBookRequestDto updateBookDto = BookUtil.createBookRequestDto();
         updateBookDto.setTitle("Updated Title");
         updateBookDto.setAuthor("Updated Author");
@@ -203,7 +202,7 @@ public class BookServiceTest {
     @Test
     @DisplayName("Throw EntityNotFoundException when book does not exist")
     void deleteById_WithInvalidId_ThrowException() {
-        Long bookId = 99L;
+        Long bookId = 999L;
         String expectedMessage = "Cannot find Book with id: " + bookId;
 
         when(bookRepository.existsById(bookId)).thenReturn(false);
@@ -223,13 +222,14 @@ public class BookServiceTest {
 
         List<BookDtoWithoutCategoryIds> expectedDtos = BookUtil.getBookDtoWithoutCategoryIds();
 
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
         when(bookRepository.findByCategories_Id(categoryId)).thenReturn(books);
         when(bookMapper.toDtoWithoutCategories(books.get(0))).thenReturn(expectedDtos.get(0));
         when(bookMapper.toDtoWithoutCategories(books.get(1))).thenReturn(expectedDtos.get(1));
 
-        List<BookDtoWithoutCategoryIds> actualDto = bookService.getBooksByCategoryId(categoryId);
+        List<BookDtoWithoutCategoryIds> actualDtos = bookService.getBooksByCategoryId(categoryId);
 
-        assertThat(actualDto)
+        assertThat(actualDtos)
                 .isNotNull()
                 .hasSize(2)
                 .containsExactly(expectedDtos.get(0), expectedDtos.get(1));

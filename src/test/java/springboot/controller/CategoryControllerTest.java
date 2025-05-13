@@ -1,10 +1,20 @@
 package springboot.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static springboot.testutil.CategoryUtil.createCategoryDto;
+import static springboot.testutil.CategoryUtil.createCategoryRequestDto;
+import static springboot.testutil.CategoryUtil.createNewCategoryRequestDto;
+import static springboot.testutil.CategoryUtil.getCategories;
+import static springboot.testutil.CategoryUtil.getCategory;
+import static springboot.testutil.CategoryUtil.getCategoryDto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,7 +26,6 @@ import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +44,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import springboot.dto.category.CategoryDto;
 import springboot.dto.category.CreateCategoryRequestDto;
-import springboot.testutil.CategoryUtil;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CategoryControllerTest {
@@ -76,8 +84,8 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Create a category with valid parameters")
     void createCategory_ValidData_Success() throws Exception {
-        CreateCategoryRequestDto requestDto = CategoryUtil.createCategoryRequestDto();
-        CategoryDto expected = CategoryUtil.createCategoryDto(CategoryUtil.getCategory(requestDto));
+        CreateCategoryRequestDto requestDto = createNewCategoryRequestDto();
+        CategoryDto expected = createCategoryDto(getCategory(requestDto));
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
@@ -92,9 +100,23 @@ public class CategoryControllerTest {
         CategoryDto actual = objectMapper.readValue(result
                 .getResponse()
                 .getContentAsString(), CategoryDto.class);
-        Assertions.assertNotNull(actual);
-        Assertions.assertNotNull(actual.getId());
-        EqualsBuilder.reflectionEquals(expected, actual);
+        assertNotNull(actual);
+        assertNotNull(actual.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
+    }
+
+    @Test
+    @DisplayName("Create category with null")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void createCategory_WithNull_ReturnException() throws Exception {
+        CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto();
+
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
+        mockMvc.perform(post("/categories")
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -102,7 +124,7 @@ public class CategoryControllerTest {
     @DisplayName("Get all categories by existing data")
     void getAll_ValidData_ReturnPageCategoryDto() throws Exception {
         Pageable requestDto = Pageable.ofSize(3);
-        List<CategoryDto> expectedCategories = CategoryUtil.getCategories();
+        List<CategoryDto> expectedCategories = getCategories();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
@@ -120,7 +142,8 @@ public class CategoryControllerTest {
                 new TypeReference<>() {
                 }
         );
-        EqualsBuilder.reflectionEquals(expectedCategories, actualCategories);
+        assertNotNull(expectedCategories);
+        assertThat(actualCategories).usingRecursiveComparison().isEqualTo(expectedCategories);
     }
 
     @Test
@@ -128,7 +151,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "user", authorities = {"USER"})
     void getCategory_ByValidId_ReturnCategoryDto() throws Exception {
         Long categoryId = 101L;
-        CategoryDto expectedDto = CategoryUtil.getCategoryDto(categoryId);
+        CategoryDto expectedDto = getCategoryDto(categoryId);
 
         MvcResult result = mockMvc.perform(get("/categories/{id}", categoryId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -139,9 +162,20 @@ public class CategoryControllerTest {
                 .getResponse()
                 .getContentAsString(), CategoryDto.class);
 
-        Assertions.assertNotNull(actualDto);
-        Assertions.assertNotNull(actualDto.getId());
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto);
+        assertNotNull(actualDto);
+        assertNotNull(actualDto.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto));
+    }
+
+    @Test
+    @DisplayName("Get category with invalid id")
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getCategory_ByInvalidId_ReturnNotFound() throws Exception {
+        Long categoryId = 999L;
+
+        mockMvc.perform(get("/categories/{id}", categoryId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -150,11 +184,12 @@ public class CategoryControllerTest {
     void updateCategory_ValidData_ReturnCategoryDto() throws Exception {
         Long categoryId = 101L;
 
-        CategoryDto expectedDto = CategoryUtil.getCategoryDto(categoryId);
-        CreateCategoryRequestDto requestDto = CategoryUtil.createCategoryRequestDto();
+        CategoryDto expectedDto = getCategoryDto(categoryId);
+        CreateCategoryRequestDto requestDto = createCategoryRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-        MvcResult result = mockMvc.perform(post("/categories/{id}", categoryId)
+
+        MvcResult result = mockMvc.perform(put("/categories/{id}", categoryId)
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -164,9 +199,25 @@ public class CategoryControllerTest {
                 .getResponse()
                 .getContentAsString(), CategoryDto.class);
 
-        Assertions.assertNotNull(actualDto);
-        Assertions.assertNotNull(actualDto.getId());
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto);
+        assertNotNull(actualDto);
+        assertNotNull(actualDto.getId());
+        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto));
+    }
+
+    @Test
+    @DisplayName("Update category with invalid id")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void updateCategory_InvalidId_ReturnNotFound() throws Exception {
+        Long categoryId = 999L;
+
+        CreateCategoryRequestDto requestDto = createCategoryRequestDto();
+
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+
+        mockMvc.perform(put("/categories/{id}", categoryId)
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -179,6 +230,17 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();
+    }
+
+    @Test
+    @DisplayName("Delete book with invalid id")
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void deleteCategory_InvalidId_ReturnNotFound() throws Exception {
+        Long categoryId = 999L;
+
+        mockMvc.perform(delete("/categories/{id}", categoryId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @AfterEach
