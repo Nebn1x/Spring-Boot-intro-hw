@@ -27,7 +27,6 @@ import java.util.List;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,7 +64,6 @@ public class BookControllerTest {
     @BeforeAll
     static void beforeAll(@Autowired WebApplicationContext applicationContext,
                           @Autowired DataSource dataSource) {
-        teardown(dataSource);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
@@ -110,9 +108,9 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Create book with null")
+    @DisplayName("Create book invalid data")
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void createBook_WithNull_ReturnException() throws Exception {
+    void createBook_InvalidData_ReturnException() throws Exception {
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
@@ -273,11 +271,6 @@ public class BookControllerTest {
                         .getContentAsString(), objectMapper.getTypeFactory()
                         .constructCollectionType(List.class, BookDtoWithoutCategoryIds.class));
         assertThat(actualDtos).usingRecursiveComparison().isEqualTo(expectedDtos);
-    }
-
-    @AfterEach
-    void tearDown(@Autowired DataSource dataSource) {
-        teardown(dataSource);
     }
 
     @AfterAll

@@ -28,6 +28,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto createBook(CreateBookRequestDto requestDto) {
+        if (requestDto == null) {
+            throw new IllegalArgumentException("Request cannot be null");
+        }
         Book book = bookMapper.toModel(requestDto);
 
         Set<Category> categories = requestDto.getCategoryIds().stream()

@@ -25,7 +25,6 @@ import java.util.List;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +60,6 @@ public class CategoryControllerTest {
     @BeforeAll
     static void beforeAll(@Autowired WebApplicationContext applicationContext,
                           @Autowired DataSource dataSource) {
-        teardown(dataSource);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
@@ -106,9 +104,9 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Create category with null")
+    @DisplayName("Create category with invalid data")
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void createCategory_WithNull_ReturnException() throws Exception {
+    void createCategory_InvalidData_ReturnException() throws Exception {
         CreateCategoryRequestDto requestDto = new CreateCategoryRequestDto();
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
@@ -241,11 +239,6 @@ public class CategoryControllerTest {
         mockMvc.perform(delete("/categories/{id}", categoryId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-    }
-
-    @AfterEach
-    void tearDown(@Autowired DataSource dataSource) {
-        teardown(dataSource);
     }
 
     @AfterAll

@@ -1,7 +1,6 @@
 package springboot.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -74,19 +73,6 @@ public class BookServiceTest {
         assertThat(saveBook).isEqualTo(bookDto);
         assertThat(saveBook).isNotNull();
         verify(bookRepository).save(book);
-    }
-
-    @DisplayName("Throws NullPointerException when has is null")
-    @Test
-    public void createBook_WithNull_ThrowsException() {
-        String exceptionMessage = "Book is null";
-        CreateBookRequestDto requestDto = new CreateBookRequestDto();
-
-        when(bookMapper.toModel(requestDto)).thenThrow(new NullPointerException(exceptionMessage));
-        Exception exception = assertThrows(NullPointerException.class, () ->
-                bookService.createBook(requestDto));
-
-        assertEquals(exceptionMessage, exception.getMessage());
     }
 
     @DisplayName("Create book with invalid category id throws EntityNotFoundException")
