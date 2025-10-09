@@ -1,8 +1,8 @@
-# 📖 Bookstore API
+#  Bookstore API
 
 This is a RESTful API for managing a bookstore, supporting CRUD operations for books, categories, users, carts, and orders, as well as user authentication, cart management, and order creation.
 
-## 📋 Features
+##  Features
 - **CRUD Operations**: Manage books and categories.
 - **Authentication**: User registration and login using JWT.
 - **Cart Management**: Add, update, and delete items in the shopping cart.
@@ -12,7 +12,7 @@ This is a RESTful API for managing a bookstore, supporting CRUD operations for b
 - **Pagination**: Supports paginated lists for books, categories, orders, and items.
 - **Roles**: Users (`USER`) and administrators (`ADMIN`) with different access rights.
 
-## 🧩 Technologies Used
+##  Technologies Used
 - **Java 17**
 - **Spring Boot**, **Spring Data JPA (Hibernate)**, **Spring Security (JWT)**
 - **MapStruct**, **Lombok**
@@ -24,7 +24,7 @@ This is a RESTful API for managing a bookstore, supporting CRUD operations for b
 The following diagram visualizes the core entity relationships in project:
 ![Preview](diagram.png)
 
-## 🗂️ Setup Instructions
+##  Setup Instructions
 
 ### Prerequisites
 - **Java 17**
@@ -91,10 +91,10 @@ The following diagram visualizes the core entity relationships in project:
 - Liquibase automatically creates the database schema and seeds initial data (roles, etc.) on the first run.
 - The API documentation is available at `http://localhost:8080/swagger-ui.html`.
 
-## 📜 API Documentation
+##  API Documentation
 - **Postman Collection**: Import the Postman collection from `docs/bookstore-api.postman_collection.json` to test the API. Configure the environment variables `base_url` (e.g., `http://localhost:8080`) and `jwt_token` for authentication.
 
-## 🧪 Testing
+##  Testing
 Run unit tests for services (`BookServiceImpl`, `CategoryServiceImpl`, `OrderServiceImpl`, etc.) with:
 ```bash
 ./mvnw test
